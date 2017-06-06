@@ -1,0 +1,10 @@
+.atomignore
+.editorconfig
+.gitignore
+.npmignore
+*.json
+*tgz
+
+node_modules
+test
+src

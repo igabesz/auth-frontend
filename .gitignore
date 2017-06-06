@@ -1,0 +1,5 @@
+*.js
+*.d.ts
+*.tgz
+lib/
+node_modules/
