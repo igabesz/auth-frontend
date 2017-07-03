@@ -1,8 +1,8 @@
 import { Injectable, FactoryProvider } from '@angular/core';
 import { Http, Request } from '@angular/http';
+import { AuthHttp, tokenNotExpired } from 'angular2-jwt';
 import { AuthService } from './auth.service';
-import { AuthConfig, AuthHttp } from 'angular2-jwt';
-import { tokenNotExpired } from 'angular2-jwt';
+import { AuthConfigExtended } from './auth.config';
 
 
 export abstract class AuthHttpExtension {
@@ -11,11 +11,11 @@ export abstract class AuthHttpExtension {
 		return {
 			provide: AuthHttp,
 			useFactory: AuthHttpExtension.authHttpFactory,
-			deps: [AuthService, AuthConfig, Http],
+			deps: [AuthService, AuthConfigExtended, Http],
 		};
 	}
 
-	private static authHttpFactory(authService: AuthService, authConfig: AuthConfig, http: Http): AuthHttp {
+	private static authHttpFactory(authService: AuthService, authConfig: AuthConfigExtended, http: Http): AuthHttp {
 		let authHttp = new AuthHttp(authConfig, http);
 		AuthHttpExtension.extend(authService, authHttp);
 		return authHttp;

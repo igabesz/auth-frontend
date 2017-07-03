@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Router, ActivatedRoute, CanActivate, CanActivateChild } from '@angular/router';
-import { tokenNotExpired } from 'angular2-jwt';
+import { tokenNotExpired, JwtHelper } from 'angular2-jwt';
 import { Subject, BehaviorSubject } from 'rxjs';
 
 
@@ -30,6 +30,8 @@ export class AuthService {
 
 	/** Specifies whether the browser shall reload the page on logout/expiration */
 	reloadOnLogout = true;
+
+	roles: string[] = [];
 
 	constructor(
 		private http: Http,
@@ -73,6 +75,9 @@ export class AuthService {
 	/** Call this when login succeeds */
 	loginSucceeded(token: string) {
 		localStorage.setItem('token', token);
+		let jwtHelper = new JwtHelper();
+		this.roles = jwtHelper.decodeToken(token).roles || [];
+		// Propagate success
 		this.loginPending = false;
 		this.setLoggedIn(true);
 		// Redirect to caller site
@@ -88,6 +93,7 @@ export class AuthService {
 	/** Call this when login fails */
 	loginFailed(err: any) {
 		localStorage.removeItem('token');
+		this.roles = [];
 		this.loginPending = false;
 		this.setLoggedIn(false);
 		this.loginErrors.next(err);
@@ -95,6 +101,7 @@ export class AuthService {
 
 	logout() {
 		localStorage.removeItem('token');
+		this.roles = [];
 		this.setLoggedIn(false);
 	}
 }

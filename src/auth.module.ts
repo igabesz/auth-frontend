@@ -1,7 +1,7 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
-import { AuthConfig, IAuthConfigOptional } from 'angular2-jwt';
+import { AuthConfigExtended, IAuthConfigExtended } from './auth.config';
 import { AuthGuard } from './auth.guard';
 import { AuthService } from './auth.service';
 import { AuthHttpExtension } from './auth-http.extension';
@@ -14,8 +14,8 @@ import { AuthHttpExtension } from './auth-http.extension';
 	],
 	providers: [
 		{
-			provide: AuthConfig,
-			useValue: new AuthConfig(),
+			provide: AuthConfigExtended,
+			useValue: new AuthConfigExtended(),
 		},
 		AuthHttpExtension.getProvider(),
 		AuthService,
@@ -26,13 +26,13 @@ import { AuthHttpExtension } from './auth-http.extension';
 })
 export class AuthModule {
 
-	static forRoot(config: IAuthConfigOptional): ModuleWithProviders {
+	static forRoot(config?: Partial<IAuthConfigExtended>): ModuleWithProviders {
 		return {
 			ngModule: AuthModule,
 			providers: [
 				{
-					provide: AuthConfig,
-					useValue: new AuthConfig(config),
+					provide: AuthConfigExtended,
+					useValue: new AuthConfigExtended(config),
 				},
 			],
 		};
